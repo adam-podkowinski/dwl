@@ -31,7 +31,7 @@ static const char *const autostart[] = {
         "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1", NULL,
         "rog-control-center", NULL,
         "/home/adam/scripts/xwayland-fix.sh", NULL,
-        "dwlb", "-ipc", "-font", "JetBrains Mono:size=12", "-scale", "2", NULL,
+        "/home/adam/scripts/rundwlb.sh", NULL,
         "dbus-update-activation-environment", "--systemd", "WAYLAND_DISPLAY", "XDG_CURRENT_DESKTOP", NULL,
         NULL /* terminate */
 };
@@ -42,6 +42,7 @@ static const Rule rules[] = {
 	{ "Gimp",     NULL,       0,            1,           -1 },
 	*/
 	/* { "firefox",  NULL,       1 << 8,       0,           -1 }, */
+    NULL,
 };
 
 /* layout(s) */
@@ -133,12 +134,28 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 /* commands */
 static const char *termcmd[] = { "kitty", NULL };
 static const char *menucmd[] = { "wofi", "--show", "drun", NULL };
+static const char *pavucontrol[] = { "pavucontrol", NULL };
+static const char *brightnessdown[] = { "brightnessctl", "set", "5%-", NULL };
+static const char *brightnessup[] = { "brightnessctl", "set", "5%+", NULL };
+static const char *asusprofile[] = { "asusctl", "profile", "-n", NULL };
+static const char *keyboardbrightnessn[] = { "asusctl", "-n", NULL };
+static const char *keyboardbrightnessp[] = { "asusctl", "-p", NULL };
+static const char *volumeup[] = { "pactl", "set-sink-volume", "0", "+10%", NULL };
+static const char *volumedown[] = { "pactl", "set-sink-volume", "0", "-10%", NULL };
 
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: c -> C, 2 -> at, etc. */
 	/* modifier                  key                 function        argument */
 	{ MODKEY,                    XKB_KEY_d,          spawn,          {.v = menucmd} },
 	{ MODKEY,                    XKB_KEY_Return,     spawn,          {.v = termcmd} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_M,          spawn,          {.v = pavucontrol} },
+	{ 0,                         XKB_KEY_XF86MonBrightnessDown, spawn, {.v = brightnessdown} },
+	{ 0,                         XKB_KEY_XF86MonBrightnessUp,   spawn, {.v = brightnessup} },
+	{ 0,                         XKB_KEY_XF86Launch4,           spawn, {.v = asusprofile} },
+	{ 0,                         XKB_KEY_XF86KbdBrightnessUp,   spawn, {.v = keyboardbrightnessn} },
+	{ 0,                         XKB_KEY_XF86KbdBrightnessDown, spawn, {.v = keyboardbrightnessp} },
+	{ 0,                         XKB_KEY_XF86AudioRaiseVolume,  spawn, {.v = volumeup} },
+	{ 0,                         XKB_KEY_XF86AudioLowerVolume,  spawn, {.v = volumedown} },
     { MODKEY,                    XKB_KEY_b,          togglebar,      {0} },
 	{ MODKEY,                    XKB_KEY_j,          focusstack,     {.i = +1} },
 	{ MODKEY,                    XKB_KEY_k,          focusstack,     {.i = -1} },
