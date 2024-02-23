@@ -1,0 +1,10 @@
+--- dwl.c
++++ dwl.c
+@@ -2580,6 +2761,7 @@ setup(void)
+ 	LISTEN_STATIC(&output_mgr->events.test, outputmgrtest);
+ 
+ 	wlr_scene_set_presentation(scene, wlr_presentation_create(dpy, backend));
++	wl_global_create(dpy, &zdwl_ipc_manager_v2_interface, 2, NULL, dwl_ipc_manager_bind);
+ 
+ 	/* Make sure XWayland clients don't connect to the parent X server,
+ 	 * e.g when running in the x11 backend or the wayland backend and the
